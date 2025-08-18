@@ -1,9 +1,12 @@
 [package]
 name = "devops-cli"
+description = "devops cli tools"
 authors = ["Dennis Frenken <dev@frenken.email>"]
 version = "0.1.0"
 license = "MIT"
 edition = "2024"
+repository = "https://github.com/denfren/devops-cli.git"
+homepage = "https://github.com/denfren/devops-cli"
 
 [dependencies]
 anyhow = "1"
@@ -26,3 +29,8 @@ thiserror = "2"
 tokio = { version = "1.47", features = ["rt-multi-thread", "macros"] }
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
