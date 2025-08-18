@@ -4,6 +4,18 @@ A suite of cli tools for DevOps
 
 See [config](#Config) for an introduction to configuration and [example](#Example) for typical configuration.
 
+## Install
+
+**Homebrew**
+```
+brew install denfren/tap/devops-cli
+```
+
+**from source**
+```
+cargo install devops-cli
+```
+
 ## dssh
 
 `dssh` spawns ssh sessions by querying for EC2 instances. It can also be used to invoke arbitrary commands using
