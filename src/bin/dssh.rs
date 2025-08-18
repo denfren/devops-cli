@@ -69,7 +69,9 @@ async fn main() -> anyhow::Result<()> {
         .collect::<anyhow::Result<Vec<String>>>()?;
 
     let selected_instances = {
-        if !opts.multi {
+        if instances.len() == 1 {
+            instances.iter().collect::<Vec<_>>()
+        } else if !opts.multi {
             dialoguer::FuzzySelect::with_theme(&dialoguer::theme::ColorfulTheme::default())
                 .with_prompt("select instances")
                 .items(&display_list)
