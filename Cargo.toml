@@ -2,7 +2,7 @@
 name = "devops-cli"
 description = "devops cli tools"
 authors = ["Dennis Frenken <dev@frenken.email>"]
-version = "0.1.1"
+version = "0.1.2"
 license = "MIT"
 edition = "2024"
 repository = "https://github.com/denfren/devops-cli.git"
