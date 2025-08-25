@@ -8,6 +8,12 @@ edition = "2024"
 repository = "https://github.com/denfren/devops-cli.git"
 homepage = "https://github.com/denfren/devops-cli"
 
+[package.metadata.wix]
+upgrade-guid = "1CACC2B8-9E0A-4164-A810-69F31E9006DC"
+path-guid = "5A015504-3230-4E57-9BE0-4360F70CAD36"
+license = false
+eula = false
+
 [dependencies]
 anyhow = "1"
 aws-config = "1.8"
