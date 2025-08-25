@@ -135,8 +135,18 @@ async fn main() -> anyhow::Result<()> {
 
     use std::process::Command;
     if commands.len() == 1 {
-        use std::os::unix::process::CommandExt;
-        Err(Command::new(&commands[0][0]).args(&commands[0][1..]).exec())?;
+        #[cfg(unix)]
+        {
+            use std::os::unix::process::CommandExt;
+            Err(Command::new(&commands[0][0]).args(&commands[0][1..]).exec())?;
+        }
+        #[cfg(windows)]
+        {
+            Command::new(&commands[0][0])
+                .args(&commands[0][1..])
+                .spawn()?;
+            std::process::exit(0);
+        }
     } else {
         for command in commands {
             Command::new(&command[0]).args(&command[1..]).spawn()?;
