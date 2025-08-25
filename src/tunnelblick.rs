@@ -1,3 +1,4 @@
+#[cfg(target_os = "macos")]
 use osascript::{Error, JavaScript};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
@@ -6,6 +7,7 @@ pub const TUNNELBLICK_CONFIG: &str = "tunnelblick";
 
 type Result<T> = std::result::Result<T, TunnelblickError>;
 
+#[cfg(target_os = "macos")]
 pub fn get_status() -> Result<Vec<Vpn>> {
     let script = JavaScript::new(
         r##"
@@ -24,6 +26,12 @@ return configs
     Ok(script.execute()?)
 }
 
+#[cfg(not(target_os = "macos"))]
+pub fn get_status() -> Result<Vec<Vpn>> {
+    Err(TunnelblickError::UnsupportedPlatform)
+}
+
+#[cfg(target_os = "macos")]
 pub fn connect(vpn_name: &str) -> Result<ChangeResult> {
     let result = JavaScript::new(
         r##"var changed = Application('Tunnelblick').connect($params);return {changed: changed};"##,
@@ -33,6 +41,12 @@ pub fn connect(vpn_name: &str) -> Result<ChangeResult> {
     Ok(result)
 }
 
+#[cfg(not(target_os = "macos"))]
+pub fn connect(_vpn_name: &str) -> Result<ChangeResult> {
+    Err(TunnelblickError::UnsupportedPlatform)
+}
+
+#[cfg(target_os = "macos")]
 pub fn disconnect(vpn_name: &str) -> Result<ChangeResult> {
     let result =
         JavaScript::new(r##"var changed = Application('Tunnelblick').disconnect($params);return {changed: changed};"##)
@@ -41,6 +55,12 @@ pub fn disconnect(vpn_name: &str) -> Result<ChangeResult> {
     Ok(result)
 }
 
+#[cfg(not(target_os = "macos"))]
+pub fn disconnect(_vpn_name: &str) -> Result<ChangeResult> {
+    Err(TunnelblickError::UnsupportedPlatform)
+}
+
+#[cfg(target_os = "macos")]
 pub fn disconnect_all() -> Result<DisconnectResult> {
     let result = JavaScript::new(
         r##"var count = Application("Tunnelblick").disconnectAll();return {count: count};"##,
@@ -48,6 +68,11 @@ pub fn disconnect_all() -> Result<DisconnectResult> {
     .execute()?;
 
     Ok(result)
+}
+
+#[cfg(not(target_os = "macos"))]
+pub fn disconnect_all() -> Result<DisconnectResult> {
+    Err(TunnelblickError::UnsupportedPlatform)
 }
 
 #[derive(Deserialize)]
@@ -80,16 +105,23 @@ pub enum State {
 
 #[derive(Error, Debug)]
 pub enum TunnelblickError {
+    #[cfg(target_os = "macos")]
     #[error("Unable to parse response from tunnelblick")]
     ScriptResponseError(#[source] osascript::Error),
 
+    #[cfg(target_os = "macos")]
     #[error("Unable to run osascript to control tunnelblick")]
     ScriptExecutionError(#[source] osascript::Error),
 
+    #[cfg(target_os = "macos")]
     #[error("The script to control tunnelblick is not compatible with your version")]
     ScriptNotCompatible(#[source] osascript::Error),
+
+    #[error("Tunnelblick is only supported on macOS")]
+    UnsupportedPlatform,
 }
 
+#[cfg(target_os = "macos")]
 impl From<osascript::Error> for TunnelblickError {
     fn from(e: Error) -> Self {
         match e {
