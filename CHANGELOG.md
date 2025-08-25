@@ -1,5 +1,12 @@
 # Changelog
 
+## [unreleased]
+
+### Added
+
+- windows installer
+- linux shell installer
+
 ## [0.1.2]
 
 ### Fixed
