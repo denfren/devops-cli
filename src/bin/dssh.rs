@@ -144,6 +144,9 @@ async fn main() -> anyhow::Result<()> {
         {
             Command::new(&commands[0][0])
                 .args(&commands[0][1..])
+                .stdin(std::process::Stdio::inherit())
+                .stdout(std::process::Stdio::inherit())
+                .stderr(std::process::Stdio::inherit())
                 .spawn()?;
             std::process::exit(0);
         }

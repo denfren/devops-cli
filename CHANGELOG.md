@@ -1,5 +1,11 @@
 # Changelog
 
+## [unreleased]
+
+### Fixed
+
+- inherit IO when spawning a single process on windows
+
 ## [0.2.0]
 
 ### Added
